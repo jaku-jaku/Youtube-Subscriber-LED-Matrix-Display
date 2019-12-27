@@ -3,6 +3,7 @@
 
 /* GPIO */
 #define GPIO_LED_MATRIX      (5U)
+#define GPIO_BUZZER          (27U)
 
 /* MATRIX CONFIG */
 #define MAT_BRIGHTNESS          (150U)

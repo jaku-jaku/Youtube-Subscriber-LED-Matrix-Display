@@ -274,6 +274,14 @@ void updateSubs() {
 //   }
 }
 
+void beepUp()
+{
+	digitalWrite(GPIO_BUZZER, HIGH);
+	delay(200);
+	digitalWrite(GPIO_BUZZER, LOW);
+	delay(50);
+}
+
 void updateDisplay(uint64_t currentSubNumber)
 {
 	static int oldNumber = 0;
@@ -285,17 +293,8 @@ void updateDisplay(uint64_t currentSubNumber)
 		displayNumber(currentSubNumber);
 		// display_Utube_And_NumberText(1000, 10);
 		matrix_ptr->show();
+		beepUp();
 	}
-}
-
-
-#define GPIO_BUZZER 27U
-void beepUp()
-{
-	digitalWrite(GPIO_BUZZER, HIGH);
-	delay(50);
-	digitalWrite(GPIO_BUZZER, LOW);
-	delay(50);
 }
 
 // =====
@@ -386,6 +385,7 @@ void setup() {
 	beepUp();
     delay(500);
 	beepUp();
+	delay(500);
     matrix_ptr->clear();
 }
 
