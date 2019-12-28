@@ -28,23 +28,23 @@ void DisplayManager::setup(void)
     this->matrix_->fillScreen(LED_WHITE_HIGH);
     this->matrix_->show();
     this->callback_beepUp_();
+    displayRainbow();
+    this->callback_beepUp_();
 	delay(500);
     this->matrix_->clear();
     this->callback_beepUp_();
-	delay(100);
 }
 
-bool DisplayManager::updateDisplay(uint64_t currentSubNumber)
+bool DisplayManager::updateDisplay(uint64_t currentSubNumber, bool forceUpdate)
 {
     bool result = false;
-    DM_NUM_DISPLAY_t disp_type;
     // update upon number changes
-	if(currentSubNumber != this->oldNumber_)
+	if((currentSubNumber != this->oldNumber_) || forceUpdate)
 	{
 		this->oldNumber_ = currentSubNumber;
 		this->matrix_->clear();
 		renderUTubeBtn();
-		disp_type = renderNumber(currentSubNumber);
+		renderNumber(currentSubNumber);
 		this->matrix_->show();
         result = true;
         // beep upon updates
@@ -230,7 +230,9 @@ void DisplayManager::renderUTubeBtn(void){
 // ------- Testing Code ------ //
 
 // Fill the screen with multiple levels of white to gauge the quality
-void DisplayManager::TEST_display_four_white(uint8_t mw, uint8_t mh) {
+void DisplayManager::TEST_display_four_white() {
+    int mw = MAT_WIDTH;
+    int mh = MAT_HEIGHT;
     this->matrix_->clear();
     this->matrix_->fillRect(0,0, mw,mh, LED_WHITE_HIGH);
     this->matrix_->drawRect(1,1, mw-2,mh-2, LED_WHITE_MEDIUM);
@@ -239,35 +241,20 @@ void DisplayManager::TEST_display_four_white(uint8_t mw, uint8_t mh) {
     this->matrix_->show();
 }
 
-void DisplayManager::TEST_display_scrollText(uint8_t mw, uint8_t mh) {
+void DisplayManager::TEST_display_scrollText() {
+    int mw = MAT_WIDTH;
+    int mh = MAT_HEIGHT;
     this->matrix_->clear();
     this->matrix_->setTextWrap(false);  // we don't wrap text so it scrolls nicely
     this->matrix_->setTextSize(1);
     this->matrix_->setRotation(0);
-    for (int8_t x=7; x>=-42; x--) {
-	this->matrix_->clear();
-	this->matrix_->setCursor(x,0);
-	this->matrix_->setTextColor(LED_GREEN_HIGH);
-	this->matrix_->print("Hello");
-	if (mh>11) {
-	    this->matrix_->setCursor(-20-x,mh-7);
-	    this->matrix_->setTextColor(LED_ORANGE_HIGH);
-	    this->matrix_->print("World");
-	}
-	this->matrix_->show();
+    for (int8_t x=10; x>=-150; x--) {
+        this->matrix_->clear();
+        this->matrix_->setCursor(x,0);
+        this->matrix_->setTextColor(Wheel((uint8_t)(x*2%255)));
+        this->matrix_->print("Devon, Happy 21st Birthday!!!!!");
+        this->matrix_->show();
        delay(50);
     }
-
-    this->matrix_->setRotation(3);
-    this->matrix_->setTextColor(LED_BLUE_HIGH);
-    for (int8_t x=7; x>=-45; x--) {
-	this->matrix_->clear();
-	this->matrix_->setCursor(x,mw/2-4);
-	this->matrix_->print("Rotate");
-	this->matrix_->show();
-       delay(50);
-    }
-    this->matrix_->setRotation(0);
-    this->matrix_->setCursor(0,0);
-    this->matrix_->show();
+    this->matrix_->clear();
 }

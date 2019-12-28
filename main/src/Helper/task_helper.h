@@ -22,6 +22,11 @@ typedef struct
 		}
 		return result;
 	}
+
+    void reset()
+    {
+        t_ms = millis();
+    }
 } LoopWatchDog_t;
 
 #endif //TASK_HELPER_H_

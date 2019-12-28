@@ -23,9 +23,13 @@ class DisplayManager{
         ~DisplayManager();
 
         void setup(void);
-        bool updateDisplay(uint64_t currentSubNumber);
+        bool updateDisplay(uint64_t currentSubNumber, bool forceUpdate);
         void displayText(String tt);
         void displayRainbow(void);
+        // Test code
+        void TEST_display_four_white();
+        void TEST_display_scrollText();
+
     private:
         Adafruit_NeoMatrix* matrix_;
         uint64_t oldNumber_;
@@ -35,10 +39,6 @@ class DisplayManager{
         void renderUTubeBtn(void);
         void renderDigits(uint8_t xOffset, uint8_t yOffset, uint16_t val, uint8_t numberDigits, uint16_t clr, uint16_t bkg_clr, const bool* tag);
         uint32_t Wheel(byte WheelPos);
-
-        // Test code
-        void TEST_display_four_white(uint8_t mw, uint8_t mh);
-        void TEST_display_scrollText(uint8_t mw, uint8_t mh);
 };
 
 #endif //DISPLAY_MANAGER_H_
