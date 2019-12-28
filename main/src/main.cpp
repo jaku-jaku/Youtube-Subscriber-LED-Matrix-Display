@@ -57,11 +57,10 @@ void loop()
 		beepUp();
 		// show youtube button
 		forceUpdate = true;
-		m_data.displayLoop.reset();
 		// reset demo counter
 		m_data.demoLoop.reset();
 	}
-	if (m_data.displayLoop.onTick())
+	if (m_data.displayLoop.onTick() || forceUpdate)
 	{	
 		if(m_data.mat_display->updateDisplay(m_data.num_Subscriber, forceUpdate))
 		{
