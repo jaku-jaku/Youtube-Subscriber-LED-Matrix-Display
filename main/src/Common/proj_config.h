@@ -5,6 +5,9 @@
 #define GPIO_LED_MATRIX      (5U)
 #define GPIO_BUZZER          (27U)
 
+/* LOOP CONFIG */
+#define DISP_LOOP_INTERVAL 	500
+
 /* MATRIX CONFIG */
 #define MAT_BRIGHTNESS          (150U)
 #define MAT_WIDTH               (32)

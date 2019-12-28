@@ -41,7 +41,7 @@
 #define LED_WHITE_MEDIUM	(LED_RED_MEDIUM  + LED_GREEN_MEDIUM  + LED_BLUE_MEDIUM)
 #define LED_WHITE_HIGH		(LED_RED_HIGH    + LED_GREEN_HIGH    + LED_BLUE_HIGH)
 
-uint16_t NEON_COMMON_convert8BitRGB2GFX(uint8_t r, uint8_t g, uint8_t b)
+int NEON_COMMON_convert8BitRGB2GFX(uint8_t r, uint8_t g, uint8_t b)
 {
     uint16_t r1 = r; 
     uint16_t g1 = g; 
