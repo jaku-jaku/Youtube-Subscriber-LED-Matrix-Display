@@ -7,7 +7,7 @@
 
 /* LOOP CONFIG */
 #define DISP_LOOP_INTERVAL 	500
-#define DEMO_LOOP_INTERVAL  60000 //ms = 60s
+#define DEMO_LOOP_INTERVAL  30000 //ms = 60s
 
 /* MATRIX CONFIG */
 #define MAT_BRIGHTNESS          (150U)

@@ -242,19 +242,15 @@ void DisplayManager::TEST_display_four_white() {
 }
 
 void DisplayManager::TEST_display_scrollText() {
-    int mw = MAT_WIDTH;
-    int mh = MAT_HEIGHT;
     this->matrix_->clear();
-    this->matrix_->setTextWrap(false);  // we don't wrap text so it scrolls nicely
-    this->matrix_->setTextSize(1);
-    this->matrix_->setRotation(0);
-    for (int8_t x=10; x>=-150; x--) {
+    this->matrix_->setTextColor(LED_WHITE_LOW);
+    for (int8_t x=10; x>=-100; x--) {
         this->matrix_->clear();
         this->matrix_->setCursor(x,0);
         this->matrix_->setTextColor(Wheel((uint8_t)(x*2%255)));
-        this->matrix_->print("Devon, Happy 21st Birthday!!!!!");
+        this->matrix_->print("Steven, Happy Birthday!");
         this->matrix_->show();
-       delay(50);
+        delay(50);
     }
-    this->matrix_->clear();
+    delay(500);
 }

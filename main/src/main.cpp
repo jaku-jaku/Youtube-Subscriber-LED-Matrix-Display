@@ -14,8 +14,8 @@ struct
 	DisplayManager* 		mat_display;
 
 	uint64_t 			num_Subscriber;
-	LoopWatchDog_t 		displayLoop;
-	LoopWatchDog_t 		demoLoop;
+	LoopWatchDog* 		displayLoop;
+	LoopWatchDog* 		demoLoop;
 } m_data;
 
 void beepUp()
@@ -35,8 +35,8 @@ void setup()
 
 	// init values
 	m_data.num_Subscriber = 382000;
-	m_data.displayLoop.init(DISP_LOOP_INTERVAL);
-	m_data.demoLoop.init(DEMO_LOOP_INTERVAL);
+	m_data.displayLoop = new LoopWatchDog(DISP_LOOP_INTERVAL);
+	m_data.demoLoop    = new LoopWatchDog(DEMO_LOOP_INTERVAL);
 	
 	// setup devices
     Serial.begin(115200);
@@ -46,21 +46,20 @@ void setup()
 	m_data.mat_display->setup();
 }
 
-bool forceUpdate = false;
+bool forceUpdate = true;
 void loop() 
 {
-	if (m_data.demoLoop.onTick())
+	if (m_data.demoLoop->onTick())
 	{
 		beepUp();
-		beepUp();
 		m_data.mat_display->TEST_display_scrollText();
-		beepUp();
 		// show youtube button
 		forceUpdate = true;
 		// reset demo counter
-		m_data.demoLoop.reset();
+		m_data.demoLoop->reset();
+		m_data.displayLoop->reset();
 	}
-	if (m_data.displayLoop.onTick() || forceUpdate)
+	if (forceUpdate || m_data.displayLoop->onTick())
 	{	
 		if(m_data.mat_display->updateDisplay(m_data.num_Subscriber, forceUpdate))
 		{
