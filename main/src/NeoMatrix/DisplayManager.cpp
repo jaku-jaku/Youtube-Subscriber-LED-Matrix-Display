@@ -6,10 +6,15 @@
 
 const int kFactor[7] = {1, 10, 100, 1000, 10000, 100000, 1000000};
 
-DisplayManager::DisplayManager(FuncPtrVoidVoid callback_beepUp)
+DisplayManager::DisplayManager(FuncPtrVoidInt callback_beepUp, DisplayConfig_t* config)
 {
     // create Neo matrix instance
-    this->matrix_ = new Adafruit_NeoMatrix(MAT_WIDTH, MAT_HEIGHT, GPIO_LED_MATRIX,  MAT_FIRST_PIXEL_POS, MAT_NEO_PIXEL_TYPE);
+    this->config_ = config;
+    this->matrix_ = new Adafruit_NeoMatrix( config->width, 
+                                            config->height, 
+                                            config->gpio,
+                                            config->orientation,
+                                            config->neo_type);
     this->oldNumber_ = 0;
     this->callback_beepUp_ = callback_beepUp;
 }
@@ -20,19 +25,24 @@ DisplayManager::~DisplayManager()
     this->matrix_ = nullptr;
 }
 
+void DisplayManager::beepUp(void)
+{
+    this->callback_beepUp_(this->config_->beepUpDuration);
+}
+
 void DisplayManager::setup(void)
 {
     this->matrix_->begin();
     this->matrix_->setTextWrap(false);
-    this->matrix_->setBrightness(MAT_BRIGHTNESS);
+    this->matrix_->setBrightness(this->config_->brightness);
     this->matrix_->fillScreen(LED_WHITE_HIGH);
     this->matrix_->show();
-    this->callback_beepUp_();
+    beepUp();
     displayRainbow();
-    this->callback_beepUp_();
+    beepUp();
 	delay(500);
     this->matrix_->clear();
-    this->callback_beepUp_();
+    beepUp();
 }
 
 bool DisplayManager::updateDisplay(uint64_t currentSubNumber, bool forceUpdate)
@@ -48,7 +58,7 @@ bool DisplayManager::updateDisplay(uint64_t currentSubNumber, bool forceUpdate)
 		this->matrix_->show();
         result = true;
         // beep upon updates
-        this->callback_beepUp_();
+        beepUp();
 	}
     return result;
 }
@@ -231,8 +241,8 @@ void DisplayManager::renderUTubeBtn(void){
 
 // Fill the screen with multiple levels of white to gauge the quality
 void DisplayManager::TEST_display_four_white() {
-    int mw = MAT_WIDTH;
-    int mh = MAT_HEIGHT;
+    int mw = this->config_->width;
+    int mh = this->config_->height;
     this->matrix_->clear();
     this->matrix_->fillRect(0,0, mw,mh, LED_WHITE_HIGH);
     this->matrix_->drawRect(1,1, mw-2,mh-2, LED_WHITE_MEDIUM);
