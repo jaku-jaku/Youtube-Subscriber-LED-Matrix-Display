@@ -1,6 +1,8 @@
 # Proj__LED-Matrix-Youtube-Subscriber-Display
 A little matrix display for showing YouTube subscriber
 
+A gift for Devon.
+
 ![Image of demo](misc/demo.png)
 
 ## Realtime sync
