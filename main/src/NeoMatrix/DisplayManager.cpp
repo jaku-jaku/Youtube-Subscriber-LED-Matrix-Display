@@ -6,10 +6,15 @@
 
 const int kFactor[7] = {1, 10, 100, 1000, 10000, 100000, 1000000};
 
-DisplayManager::DisplayManager(FuncPtrVoidVoid callback_beepUp)
+DisplayManager::DisplayManager(FuncPtrVoidInt callback_beepUp, DisplayConfig_t* config)
 {
     // create Neo matrix instance
-    this->matrix_ = new Adafruit_NeoMatrix(MAT_WIDTH, MAT_HEIGHT, GPIO_LED_MATRIX,  MAT_FIRST_PIXEL_POS, MAT_NEO_PIXEL_TYPE);
+    this->config_ = config;
+    this->matrix_ = new Adafruit_NeoMatrix( config->width, 
+                                            config->height, 
+                                            config->gpio,
+                                            config->orientation,
+                                            config->neo_type);
     this->oldNumber_ = 0;
     this->callback_beepUp_ = callback_beepUp;
 }
@@ -20,35 +25,40 @@ DisplayManager::~DisplayManager()
     this->matrix_ = nullptr;
 }
 
+void DisplayManager::beepUp(void)
+{
+    this->callback_beepUp_(this->config_->beepUpDuration);
+}
+
 void DisplayManager::setup(void)
 {
     this->matrix_->begin();
     this->matrix_->setTextWrap(false);
-    this->matrix_->setBrightness(MAT_BRIGHTNESS);
+    this->matrix_->setBrightness(this->config_->brightness);
     this->matrix_->fillScreen(LED_WHITE_HIGH);
     this->matrix_->show();
-    this->callback_beepUp_();
+    beepUp();
+    displayRainbow();
+    beepUp();
 	delay(500);
     this->matrix_->clear();
-    this->callback_beepUp_();
-	delay(100);
+    beepUp();
 }
 
-bool DisplayManager::updateDisplay(uint64_t currentSubNumber)
+bool DisplayManager::updateDisplay(uint64_t currentSubNumber, bool forceUpdate)
 {
     bool result = false;
-    DM_NUM_DISPLAY_t disp_type;
     // update upon number changes
-	if(currentSubNumber != this->oldNumber_)
+	if((currentSubNumber != this->oldNumber_) || forceUpdate)
 	{
 		this->oldNumber_ = currentSubNumber;
 		this->matrix_->clear();
 		renderUTubeBtn();
-		disp_type = renderNumber(currentSubNumber);
+		renderNumber(currentSubNumber);
 		this->matrix_->show();
         result = true;
         // beep upon updates
-        this->callback_beepUp_();
+        beepUp();
 	}
     return result;
 }
@@ -230,7 +240,9 @@ void DisplayManager::renderUTubeBtn(void){
 // ------- Testing Code ------ //
 
 // Fill the screen with multiple levels of white to gauge the quality
-void DisplayManager::TEST_display_four_white(uint8_t mw, uint8_t mh) {
+void DisplayManager::TEST_display_four_white() {
+    int mw = this->config_->width;
+    int mh = this->config_->height;
     this->matrix_->clear();
     this->matrix_->fillRect(0,0, mw,mh, LED_WHITE_HIGH);
     this->matrix_->drawRect(1,1, mw-2,mh-2, LED_WHITE_MEDIUM);
@@ -239,35 +251,16 @@ void DisplayManager::TEST_display_four_white(uint8_t mw, uint8_t mh) {
     this->matrix_->show();
 }
 
-void DisplayManager::TEST_display_scrollText(uint8_t mw, uint8_t mh) {
+void DisplayManager::TEST_display_scrollText() {
     this->matrix_->clear();
-    this->matrix_->setTextWrap(false);  // we don't wrap text so it scrolls nicely
-    this->matrix_->setTextSize(1);
-    this->matrix_->setRotation(0);
-    for (int8_t x=7; x>=-42; x--) {
-	this->matrix_->clear();
-	this->matrix_->setCursor(x,0);
-	this->matrix_->setTextColor(LED_GREEN_HIGH);
-	this->matrix_->print("Hello");
-	if (mh>11) {
-	    this->matrix_->setCursor(-20-x,mh-7);
-	    this->matrix_->setTextColor(LED_ORANGE_HIGH);
-	    this->matrix_->print("World");
-	}
-	this->matrix_->show();
-       delay(50);
+    this->matrix_->setTextColor(LED_WHITE_LOW);
+    for (int8_t x=10; x>=-100; x--) {
+        this->matrix_->clear();
+        this->matrix_->setCursor(x,0);
+        this->matrix_->setTextColor(Wheel((uint8_t)(x*2%255)));
+        this->matrix_->print("Devon, Happy Birthday!");
+        this->matrix_->show();
+        delay(50);
     }
-
-    this->matrix_->setRotation(3);
-    this->matrix_->setTextColor(LED_BLUE_HIGH);
-    for (int8_t x=7; x>=-45; x--) {
-	this->matrix_->clear();
-	this->matrix_->setCursor(x,mw/2-4);
-	this->matrix_->print("Rotate");
-	this->matrix_->show();
-       delay(50);
-    }
-    this->matrix_->setRotation(0);
-    this->matrix_->setCursor(0,0);
-    this->matrix_->show();
+    delay(500);
 }
