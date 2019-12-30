@@ -258,7 +258,7 @@ void DisplayManager::TEST_display_scrollText() {
         this->matrix_->clear();
         this->matrix_->setCursor(x,0);
         this->matrix_->setTextColor(Wheel((uint8_t)(x*2%255)));
-        this->matrix_->print("Steven, Happy Birthday!");
+        this->matrix_->print("Devon, Happy Birthday!");
         this->matrix_->show();
         delay(50);
     }
