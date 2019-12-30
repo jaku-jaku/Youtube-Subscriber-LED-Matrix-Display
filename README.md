@@ -1,6 +1,8 @@
 # Proj__LED-Matrix-Youtube-Subscriber-Display
 A little matrix display for showing YouTube subscriber
 
+![Image of demo](misc/demo.png)
+
 ## Realtime sync
 - Please duplicate 'proj_credential_template.h' and rename as 'proj_credential.h', and fill in your credential
 
