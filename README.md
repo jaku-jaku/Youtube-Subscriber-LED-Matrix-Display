@@ -26,10 +26,3 @@ A gift for Devon.
   - capacitors
   - resistor (to prevent 1st LED burnt out due to current spike)
 
-
-
-
-
-
-
-https://www.hackster.io/donowak/internet-controlled-led-strip-using-esp32-arduino-2ca8a9
