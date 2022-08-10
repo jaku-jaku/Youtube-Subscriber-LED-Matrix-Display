@@ -1,7 +1,7 @@
 # Proj__LED-Matrix-Youtube-Subscriber-Display
 A little matrix display for showing YouTube subscriber
 
-A gift for Devon.
+A gift for [Devon Crawford](https://www.youtube.com/c/DevonCrawford).
 
 ![Image of demo](misc/demo.png)
 
